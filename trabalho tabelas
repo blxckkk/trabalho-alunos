@@ -50,7 +50,7 @@ INSERT INTO cursos (nome_curso) VALUES
 ('Psicologia'),
 ('Arquitetura'),
 ('Engenharia Civil'),
-('Marketing'),
+('Formação docente'),
 ('Contabilidade'),
 ('Design Gráfico');
 
