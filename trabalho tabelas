@@ -34,13 +34,13 @@ INSERT INTO cidades (cidade, estado) VALUES
 ('São Paulo', 'SP'),
 ('Rio de Janeiro', 'RJ'),
 ('Curitiba', 'PR'),
-('Salvador', 'BA'),
+('Foz do iguaçu', 'BA'),
 ('Belo Horizonte', 'MG'),
-('Porto Alegre', 'RS'),
+('Porto alegre', 'RS'),
 ('Recife', 'PE'),
 ('Fortaleza', 'CE'),
 ('Brasília', 'DF'),
-('Manaus', 'AM');
+('matelandia', 'AM');
 
 INSERT INTO cursos (nome_curso) VALUES
 ('Engenharia de Software'),
