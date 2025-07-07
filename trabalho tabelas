@@ -1,176 +1,185 @@
+CREATE DATABASE IF NOT EXISTS sistema_alunos;
+USE sistema_alunos;
 
 CREATE TABLE cidades (
-    id_cidade INT PRIMARY KEY AUTO_INCREMENT,
-    nome_cidade VARCHAR(100) NOT NULL,
-    estado VARCHAR(2) NOT NULL
+    cidade VARCHAR(100) NOT NULL,
+    estado CHAR(2) NOT NULL,
+    PRIMARY KEY (cidade)
 );
 
 CREATE TABLE cursos (
-    id_curso INT PRIMARY KEY AUTO_INCREMENT,
-    nome_curso VARCHAR(100) NOT NULL
+    id_curso INT AUTO_INCREMENT,
+    nome_curso VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id_curso)
 );
 
 CREATE TABLE alunos (
-    id_aluno INT PRIMARY KEY AUTO_INCREMENT,
+    id_aluno INT AUTO_INCREMENT,
     nome_aluno VARCHAR(100) NOT NULL,
-    id_cidade INT NOT NULL,
-    FOREIGN KEY (id_cidade) REFERENCES cidades(id_cidade)
+    cidade VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id_aluno),
+    FOREIGN KEY (cidade) REFERENCES cidades(cidade)
 );
 
 CREATE TABLE matriculas (
-    id_matricula INT PRIMARY KEY AUTO_INCREMENT,
     id_aluno INT NOT NULL,
     id_curso INT NOT NULL,
-    data_matricula DATE DEFAULT CURRENT_DATE,
+    data_matricula DATE NOT NULL,
+    PRIMARY KEY (id_aluno, id_curso),
     FOREIGN KEY (id_aluno) REFERENCES alunos(id_aluno),
-    FOREIGN KEY (id_curso) REFERENCES cursos(id_curso),
-    UNIQUE KEY unique_matricula (id_aluno, id_curso) 
+    FOREIGN KEY (id_curso) REFERENCES cursos(id_curso)
 );
 
-INSERT INTO cidades (nome_cidade, estado) VALUES
+INSERT INTO cidades (cidade, estado) VALUES
 ('São Paulo', 'SP'),
 ('Rio de Janeiro', 'RJ'),
-('Belo Horizonte', 'MG'),
 ('Curitiba', 'PR'),
-('Porto Alegre', 'RS'),
 ('Salvador', 'BA'),
+('Belo Horizonte', 'MG'),
+('Porto Alegre', 'RS'),
+('Recife', 'PE'),
 ('Fortaleza', 'CE'),
 ('Brasília', 'DF'),
-('Recife', 'PE'),
 ('Manaus', 'AM');
 
 INSERT INTO cursos (nome_curso) VALUES
-('Análise e Desenvolvimento de Sistemas'),
-('Engenharia da Computação'),
+('Engenharia de Software'),
 ('Administração'),
-('Direito'),
 ('Medicina'),
+('Direito'),
 ('Psicologia'),
+('Arquitetura'),
 ('Engenharia Civil'),
 ('Marketing'),
 ('Contabilidade'),
 ('Design Gráfico');
 
-INSERT INTO alunos (nome_aluno, id_cidade) VALUES
-('João Silva', 1),
-('Maria Santos', 2),
-('Pedro Oliveira', 3),
-('Ana Costa', 4),
-('Carlos Ferreira', 5),
-('Juliana Lima', 6),
-('Rafael Alves', 7),
-('Fernanda Rodrigues', 8),
-('Lucas Pereira', 9),
-('Camila Barbosa', 10),
-('Bruno Martins', 1),
-('Gabriela Souza', 2),
-('Thiago Nunes', 3),
-('Larissa Dias', 4),
-('Ricardo Gomes', 5);
+INSERT INTO alunos (nome_aluno, cidade) VALUES
+('Manoel', 'São Paulo'),
+('Maria da silva', 'Rio de Janeiro'),
+('Maria Santos', 'Curitiba'),
+('Ana Castela', 'Salvador'),
+('Pedro costa', 'Belo Horizonte'),
+('Lucia Rodrigues', 'Porto Alegre'),
+('Rafael Lima', 'Recife'),
+('Julia karte', 'Fortaleza'),
+('Carlos ferreira', 'Brasília'),
+('Fernanda Souza', 'Manaus'),
+('Gabriel Martins', 'São Paulo'),
+('Camila Pereira', 'Rio de Janeiro'),
+('Diego Nascimento', 'Curitiba'),
+('Isabela Carvalho', 'Salvador'),
+('Thiago Barbosa', 'Belo Horizonte');
 
-INSERT INTO matriculas (id_aluno, id_curso) VALUES
-(1, 1),   -- João Silva - ADS
-(1, 3),   -- Maria junior - Administração
-(2, 2),   -- Maria Santos - Eng. Computação
-(3, 4),   -- Pedro Oliveira - Direito
-(4, 5),   -- Ana Costa - Medicina
-(5, 6),   -- Carlos Ferreira - Psicologia
-(6, 7),   -- Juliana Lima - Eng. Civil
-(7, 8),   -- Rafael Alves - Marketing
-(8, 9),   -- Fernanda Rodrigues - Contabilidade
-(9, 10),  -- Lucas Pereira - Design Gráfico
-(10, 1),  -- Camila Barbosa - ADS
-(11, 2),  -- Bruno Martins - Eng. Computação
-(12, 3),  -- Gabriela Souza - Administração
-(13, 4),  -- Thiago Nunes - Direito
-(14, 5),  -- Larissa Dias - Medicina
-(15, 6),  -- Ricardo Gomes - Psicologia
-(2, 8),   -- Maria Santos - Marketing (segunda matrícula)
-(3, 1),   -- Pedro Oliveira - ADS (segunda matrícula)
-(4, 2);   -- Ana Costa - Eng. Computação (segunda matrícula)
+INSERT INTO matriculas (id_aluno, id_curso, data_matricula) VALUES
+(1, 1, '2024-01-25'), -- Manoel - Engenharia de Software
+(1, 8, '2024-02-27'), -- Maria da silva - Marketing
+(2, 2, '2024-01-10'), -- Maria Santos - Administração
+(3, 1, '2024-01-12'), -- Pedro costa - Engenharia de Software
+(4, 3, '2024-01-09'), -- Ana castela - Medicina
+(5, 4, '2024-01-18'), -- Carlos Ferreira - Direito
+(6, 5, '2024-02-14'), -- Lucia Rodrigues - Psicologia
+(7, 6, '2024-01-25'), -- gustavo lima - Arquitetura
+(8, 7, '2024-01-30'), -- Julia karte - Engenharia Civil
+(9, 2, '2024-02-01'), -- Carla silva- Administração
+(10, 10, '2024-02-05'), -- Fernanda Souza - Design Gráfico
+(11, 1, '2024-02-08'), -- Gabriel Martins - Engenharia de Software
+(12, 9, '2024-02-10'), -- Camila Pereira - Contabilidade
+(13, 6, '2024-02-12'), -- Diego Nascimento - Arquitetura
+(14, 3, '2024-02-15'), -- Isabely rodrigues - Medicina
+(15, 4, '2024-02-18'), -- Thiago Barbosa - Direito
+(2, 9, '2024-03-01'), -- Maria Santos - Contabilidade (segunda matrícula)
+(3, 7, '2024-03-05'), -- Pedro Oliveira - Engenharia Civil (segunda matrícula)
+(5, 2, '2024-03-10'); -- Carlos Ferreira - Administração (segunda matrícula)
 
-SELECT 
-    a.id_aluno,
+SELECT
     a.nome_aluno,
     c.nome_curso,
-    cid.nome_cidade,
-    cid.estado,
+    a.cidade,
+    ci.estado,
     m.data_matricula
 FROM alunos a
 INNER JOIN matriculas m ON a.id_aluno = m.id_aluno
 INNER JOIN cursos c ON m.id_curso = c.id_curso
-INNER JOIN cidades cid ON a.id_cidade = cid.id_cidade
-ORDER BY a.nome_aluno, c.nome_curso;
+INNER JOIN cidades ci ON a.cidade = ci.cidade
+ORDER BY a.nome_aluno;
 
-SELECT 
+SELECT
+    estado,
+    COUNT(*) as 'Quantidade de Alunos'
+FROM alunos a
+INNER JOIN cidades c ON a.cidade = c.cidade
+GROUP BY estado
+ORDER BY COUNT(*) DESC;
+
+SELECT
+    c.nome_curso,
+    COUNT(*) as 'Quantidade de Matrículas'
+FROM matriculas m
+INNER JOIN cursos c ON m.id_curso = c.id_curso
+GROUP BY c.nome_curso
+ORDER BY COUNT(*) DESC;
+
+SELECT
     a.nome_aluno,
-    cid.nome_cidade,
-    cid.estado,
-    GROUP_CONCAT(c.nome_curso ORDER BY c.nome_curso SEPARATOR ', ') AS cursos_matriculados,
-    COUNT(m.id_curso) AS total_cursos
+    COUNT(*) as 'Quantidade de Cursos'
+FROM alunos a
+INNER JOIN matriculas m ON a.id_aluno = m.id_aluno
+GROUP BY a.nome_aluno
+HAVING COUNT(*) > 1
+ORDER BY COUNT(*) DESC;
+
+SELECT
+    nome_aluno,
+    cidade
+FROM alunos
+WHERE cidade = 'São Paulo';
+
+SELECT
+    a.nome_aluno,
+    c.nome_curso,
+    m.data_matricula
 FROM alunos a
 INNER JOIN matriculas m ON a.id_aluno = m.id_aluno
 INNER JOIN cursos c ON m.id_curso = c.id_curso
-INNER JOIN cidades cid ON a.id_cidade = cid.id_cidade
-GROUP BY a.id_aluno, a.nome_aluno, cid.nome_cidade, cid.estado
-ORDER BY a.nome_aluno;
+WHERE c.nome_curso = 'desinvolvimento de sistema';
 
-SELECT 
-    cid.estado,
-    COUNT(DISTINCT a.id_aluno) as total_alunos
-FROM alunos a
-INNER JOIN cidades cid ON a.id_cidade = cid.id_cidade
-GROUP BY cid.estado
-ORDER BY total_alunos DESC;
-
-SELECT 
-    c.nome_curso,
-    COUNT(m.id_aluno) as total_matriculas
-FROM cursos c
-INNER JOIN matriculas m ON c.id_curso = m.id_curso
-GROUP BY c.id_curso, c.nome_curso
-ORDER BY total_matriculas DESC;
-
-SELECT 
+SELECT
     a.nome_aluno,
-    cid.nome_cidade,
-    cid.estado,
-    COUNT(m.id_curso) as total_cursos
+    c.nome_curso,
+    m.data_matricula
 FROM alunos a
 INNER JOIN matriculas m ON a.id_aluno = m.id_aluno
-INNER JOIN cidades cid ON a.id_cidade = cid.id_cidade
-GROUP BY a.id_aluno, a.nome_aluno, cid.nome_cidade, cid.estado
-HAVING COUNT(m.id_curso) > 1
-ORDER BY total_cursos DESC;
+INNER JOIN cursos c ON m.id_curso = c.id_curso
+WHERE m.data_matricula BETWEEN '2024-08-04' AND '2024-07-23'
+ORDER BY m.data_matricula;
 
-SELECT 
-    a.nome_aluno,
-    cid.nome_cidade,
-    cid.estado,
-    COALESCE(c.nome_curso, 'Não matriculado') as curso
-FROM alunos a
-INNER JOIN cidades cid ON a.id_cidade = cid.id_cidade
-LEFT JOIN matriculas m ON a.id_aluno = m.id_aluno
-LEFT JOIN cursos c ON m.id_curso = c.id_curso
-ORDER BY a.nome_aluno;
-
-SELECT 
+SELECT
     c.nome_curso,
-    COUNT(m.id_aluno) as total_alunos
+    COUNT(m.id_aluno) as 'Alunos Matriculados'
 FROM cursos c
 LEFT JOIN matriculas m ON c.id_curso = m.id_curso
-GROUP BY c.id_curso, c.nome_curso
-ORDER BY total_alunos DESC;
+GROUP BY c.nome_curso
+ORDER BY COUNT(m.id_aluno) DESC;
 
-DESCRIBE cidades;
-DESCRIBE cursos;
-DESCRIBE alunos;
-DESCRIBE matriculas;
+SELECT
+    a.nome_aluno,
+    a.cidade,
+    ci.estado
+FROM alunos a
+INNER JOIN cidades ci ON a.cidade = ci.cidade
+WHERE ci.estado = 'SP'
+ORDER BY a.nome_aluno;
 
-SELECT 'Cidades' as tabela, COUNT(*) as total FROM cidades
-UNION ALL
-SELECT 'Cursos' as tabela, COUNT(*) as total FROM cursos
-UNION ALL
-SELECT 'Alunos' as tabela, COUNT(*) as total FROM alunos
-UNION ALL
-SELECT 'Matrículas' as tabela, COUNT(*) as total FROM matriculas;
+SELECT
+    a.nome_aluno,
+    a.cidade,
+    ci.estado,
+    c.nome_curso,
+    m.data_matricula
+FROM alunos a
+INNER JOIN cidades ci ON a.cidade = ci.cidade
+INNER JOIN matriculas m ON a.id_aluno = m.id_aluno
+INNER JOIN cursos c ON m.id_curso = c.id_curso
+WHERE a.nome_aluno = 'Maria da silva'
+ORDER BY m.data_matricula;
