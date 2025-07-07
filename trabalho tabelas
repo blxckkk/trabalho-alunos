@@ -1,24 +1,15 @@
--- =========================================
--- SISTEMA DE BANCO DE DADOS - ALUNOS E CURSOS
--- =========================================
 
--- 1. CRIAÇÃO DAS TABELAS COM CHAVES PRIMÁRIAS E ESTRANGEIRAS
--- =========================================
-
--- Tabela CIDADES (deve ser criada primeiro por ser referenciada)
 CREATE TABLE cidades (
     id_cidade INT PRIMARY KEY AUTO_INCREMENT,
     nome_cidade VARCHAR(100) NOT NULL,
     estado VARCHAR(2) NOT NULL
 );
 
--- Tabela CURSOS
 CREATE TABLE cursos (
     id_curso INT PRIMARY KEY AUTO_INCREMENT,
     nome_curso VARCHAR(100) NOT NULL
 );
 
--- Tabela ALUNOS (referencia cidades)
 CREATE TABLE alunos (
     id_aluno INT PRIMARY KEY AUTO_INCREMENT,
     nome_aluno VARCHAR(100) NOT NULL,
@@ -26,7 +17,6 @@ CREATE TABLE alunos (
     FOREIGN KEY (id_cidade) REFERENCES cidades(id_cidade)
 );
 
--- Tabela MATRICULAS (tabela associativa - referencia alunos e cursos)
 CREATE TABLE matriculas (
     id_matricula INT PRIMARY KEY AUTO_INCREMENT,
     id_aluno INT NOT NULL,
@@ -34,14 +24,9 @@ CREATE TABLE matriculas (
     data_matricula DATE DEFAULT CURRENT_DATE,
     FOREIGN KEY (id_aluno) REFERENCES alunos(id_aluno),
     FOREIGN KEY (id_curso) REFERENCES cursos(id_curso),
-    UNIQUE KEY unique_matricula (id_aluno, id_curso) -- Evita matrícula duplicada
+    UNIQUE KEY unique_matricula (id_aluno, id_curso) 
 );
 
--- =========================================
--- 2. INSERÇÃO DOS DADOS
--- =========================================
-
--- Inserir dados na tabela CIDADES
 INSERT INTO cidades (nome_cidade, estado) VALUES
 ('São Paulo', 'SP'),
 ('Rio de Janeiro', 'RJ'),
@@ -54,7 +39,6 @@ INSERT INTO cidades (nome_cidade, estado) VALUES
 ('Recife', 'PE'),
 ('Manaus', 'AM');
 
--- Inserir dados na tabela CURSOS
 INSERT INTO cursos (nome_curso) VALUES
 ('Análise e Desenvolvimento de Sistemas'),
 ('Engenharia da Computação'),
@@ -67,7 +51,6 @@ INSERT INTO cursos (nome_curso) VALUES
 ('Contabilidade'),
 ('Design Gráfico');
 
--- Inserir dados na tabela ALUNOS
 INSERT INTO alunos (nome_aluno, id_cidade) VALUES
 ('João Silva', 1),
 ('Maria Santos', 2),
@@ -85,10 +68,9 @@ INSERT INTO alunos (nome_aluno, id_cidade) VALUES
 ('Larissa Dias', 4),
 ('Ricardo Gomes', 5);
 
--- Inserir dados na tabela MATRICULAS
 INSERT INTO matriculas (id_aluno, id_curso) VALUES
 (1, 1),   -- João Silva - ADS
-(1, 3),   -- João Silva - Administração
+(1, 3),   -- Maria junior - Administração
 (2, 2),   -- Maria Santos - Eng. Computação
 (3, 4),   -- Pedro Oliveira - Direito
 (4, 5),   -- Ana Costa - Medicina
@@ -107,11 +89,6 @@ INSERT INTO matriculas (id_aluno, id_curso) VALUES
 (3, 1),   -- Pedro Oliveira - ADS (segunda matrícula)
 (4, 2);   -- Ana Costa - Eng. Computação (segunda matrícula)
 
--- =========================================
--- 3. CONSULTAS SQL
--- =========================================
-
--- CONSULTA 1: Todos os alunos com seus cursos, cidades e estados
 SELECT 
     a.id_aluno,
     a.nome_aluno,
@@ -125,7 +102,6 @@ INNER JOIN cursos c ON m.id_curso = c.id_curso
 INNER JOIN cidades cid ON a.id_cidade = cid.id_cidade
 ORDER BY a.nome_aluno, c.nome_curso;
 
--- CONSULTA 2: Relatório completo por aluno (agrupado)
 SELECT 
     a.nome_aluno,
     cid.nome_cidade,
@@ -139,7 +115,6 @@ INNER JOIN cidades cid ON a.id_cidade = cid.id_cidade
 GROUP BY a.id_aluno, a.nome_aluno, cid.nome_cidade, cid.estado
 ORDER BY a.nome_aluno;
 
--- CONSULTA 3: Alunos por estado
 SELECT 
     cid.estado,
     COUNT(DISTINCT a.id_aluno) as total_alunos
@@ -148,7 +123,6 @@ INNER JOIN cidades cid ON a.id_cidade = cid.id_cidade
 GROUP BY cid.estado
 ORDER BY total_alunos DESC;
 
--- CONSULTA 4: Cursos mais procurados
 SELECT 
     c.nome_curso,
     COUNT(m.id_aluno) as total_matriculas
@@ -157,7 +131,6 @@ INNER JOIN matriculas m ON c.id_curso = m.id_curso
 GROUP BY c.id_curso, c.nome_curso
 ORDER BY total_matriculas DESC;
 
--- CONSULTA 5: Alunos com múltiplas matrículas
 SELECT 
     a.nome_aluno,
     cid.nome_cidade,
@@ -170,11 +143,6 @@ GROUP BY a.id_aluno, a.nome_aluno, cid.nome_cidade, cid.estado
 HAVING COUNT(m.id_curso) > 1
 ORDER BY total_cursos DESC;
 
--- =========================================
--- 4. CONSULTAS ADICIONAIS ÚTEIS
--- =========================================
-
--- Lista todos os alunos (mesmo sem matrícula)
 SELECT 
     a.nome_aluno,
     cid.nome_cidade,
@@ -186,7 +154,6 @@ LEFT JOIN matriculas m ON a.id_aluno = m.id_aluno
 LEFT JOIN cursos c ON m.id_curso = c.id_curso
 ORDER BY a.nome_aluno;
 
--- Lista todos os cursos (mesmo sem alunos)
 SELECT 
     c.nome_curso,
     COUNT(m.id_aluno) as total_alunos
@@ -195,17 +162,11 @@ LEFT JOIN matriculas m ON c.id_curso = m.id_curso
 GROUP BY c.id_curso, c.nome_curso
 ORDER BY total_alunos DESC;
 
--- =========================================
--- 5. COMANDOS DE VERIFICAÇÃO
--- =========================================
-
--- Verificar estrutura das tabelas
 DESCRIBE cidades;
 DESCRIBE cursos;
 DESCRIBE alunos;
 DESCRIBE matriculas;
 
--- Contar registros em cada tabela
 SELECT 'Cidades' as tabela, COUNT(*) as total FROM cidades
 UNION ALL
 SELECT 'Cursos' as tabela, COUNT(*) as total FROM cursos
